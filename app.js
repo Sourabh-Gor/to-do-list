@@ -20,17 +20,6 @@ const itemSchema = mongoose.Schema({
 
 const itemModel = mongoose.model("Item" , itemSchema);
 
-const item1 = new itemModel({
-  item: "Finish FSD Project"
-});
-const item2 = new itemModel({
-  item: "Finish FSD Assignment"
-});
-const item3 = new itemModel({
-  item: "Submit FSD Project and assignment"
-});
-
-const defaultItems = [item1, item2, item3];
 
 
 
@@ -39,27 +28,16 @@ app.get("/", function(req, res) {
 const day = date.getDate();
 
 itemModel.find({} , function(err , data){
-    if(data.length === 0){
-      itemModel.insertMany(defaultItems , function(err){
-        if (err){
-          console.log(err);
-        }
-        else{
-          console.log("Insertion Successfull");
-        }
-      });
-      res.redirect("/");
-    }
-    else{
+    
      res.render("list", {listTitle: day, newListItems: data});
-    }
-});
+    });
 });
 
 app.post("/", function(req, res){
 
   const item = new itemModel( {item: req.body.newItem});;
   item.save();
+  console.log("Successfully Inserted!");
   res.redirect("/");
 });
 
